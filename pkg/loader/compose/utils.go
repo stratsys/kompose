@@ -95,15 +95,12 @@ func loadEnvVars(envars []string) []kobject.EnvVar {
 // getComposeFileDir returns compose file directory
 // Assume all the docker-compose files are in the same directory
 func getComposeFileDir(inputFiles []string) (string, error) {
-	inputFile := inputFiles[0]
-	if strings.Index(inputFile, "/") != 0 {
-		workDir, err := os.Getwd()
-		if err != nil {
-			return "", errors.Wrap(err, "Unable to retrieve compose file directory")
-		}
-		inputFile = filepath.Join(workDir, inputFile)
+	absPath, err := filepath.Abs(inputFiles[0])
+	if err == nil {
+		return filepath.Dir(absPath), nil
 	}
-	return filepath.Dir(inputFile), nil
+
+	return "", err
 }
 
 func handleServiceType(ServiceType string) (string, error) {
