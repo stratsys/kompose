@@ -140,6 +140,9 @@ func loadV3Placement(constraints []string) map[string]string {
 	for _, j := range constraints {
 		p := strings.Split(j, " == ")
 		if len(p) < 2 {
+			p = strings.Split(j, "==")
+		}
+		if len(p) < 2 {
 			log.Warn(p[0], errMsg)
 			continue
 		}
